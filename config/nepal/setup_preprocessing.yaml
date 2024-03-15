@@ -1,0 +1,38 @@
+preprocessing:
+  hazards:
+    - type: "earthquakes"
+      source: "data/nepal/inputs/hazards/Global_earthquake_hazard_WB/" # source: "data/nepal/inputs/hazards/earthquakes/" # Directory for input earthquakes
+      map_unit: "cm/s^2" # The unit in the pga maps
+      return_periods: [475, 975, 1500, 2475] # Filenames need to have a format
+      substantial_damage: 0.01 # Substantial Damage threshold (m)
+      complete_destruction: None # Complete destruction threshold
+      destination: "data/nepal/outputs/hazards/" # id, geometry, value, damage (gpkg files)
+      historical: False
+
+    - type: "landslides"
+      source: "data/nepal/inputs/hazards/landslides/" # path to input earthquakes (.tif)
+      map_unit: "" # The unit in the pga maps
+      return_periods: None #
+      substantial_damage: None # Substantial Damage threshold (m)
+      complete_destruction: None # Complete destruction threshold
+      destination: "data/nepal/outputs/hazards/"
+      historical: True # True when hazard information do not have return periods
+
+  infrastructures:
+    - type: "PHC"
+      filter: ["HF_T_RO=='Primary Health Care Center'"]
+      source: "data/nepal/inputs/heal/nepal_npl_ct_heal_heal_sp_tab_NDRRNA_14022024.gpkg"
+      destination: "data/nepal/outputs/infrastructure/"
+
+    - type: "healt_facilities"
+      filter: ["HF_T_RO!='Primary Health Care Center'"]
+      source: "data/nepal/inputs/heal/nepal_npl_ct_heal_heal_sp_tab_NDRRNA_14022024.gpkg"
+      destination: "data/nepal/outputs/infrastructure/"
+
+  population:
+    - type: "population_4326"
+      source: "data/nepal/inputs/popu/nepal_npl_ct_popu_pop_sp_py_GHS_2023_p_u_Clipped_E2020_Nepal_4326.tif"
+      destination: "data/nepal/outputs/population/"
+    - type: "population_54009"
+      source: "data/nepal/inputs/popu/nepal_npl_ct_popu_pop_sp_py_GHS_2023_p_u_Clipped_E2020_Nepal_54009.tif"
+      destination: "data/nepal/outputs/population/"

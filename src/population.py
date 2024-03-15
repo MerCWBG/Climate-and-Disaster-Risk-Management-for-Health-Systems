@@ -1,37 +1,23 @@
-import geopandas as gpd
+import pandas as pd
 
 
-class population:
-    def __init__(self, id, polygon, population_qty):
-        self.id = id
-        self.polygon = polygon
-        self.population_qty = population_qty
+class Population:
+    def __init__(self):
+        pass
 
-
-class PopulationData:
-    @staticmethod
-    def read_shapefile(shapefile_path):
+    def read_csv(self, file_path):
         """
-        Lee un archivo shapefile que contiene información sobre la población y devuelve un GeoDataFrame.
+        Read a CSV file and return a DataFrame.
+
         Args:
-            shapefile_path (str): La ruta al archivo shapefile.
-        Returns:
-            GeoDataFrame: Un GeoDataFrame que contiene los datos de población.
-        """
-        gdf = gpd.read_file(shapefile_path)
-        return gdf
+            file_path (str): Path to the CSV file.
 
-    @staticmethod
-    def create_population_objects(gdf):
-        """
-        Crea objetos Population a partir de un GeoDataFrame.
-        Args:
-            gdf (GeoDataFrame): El GeoDataFrame que contiene los datos de población.
         Returns:
-            list: Una lista de objetos Population.
+            DataFrame: DataFrame containing the data from the CSV file.
         """
-        populations = []
-        for index, row in gdf.iterrows():
-            population = Population(row["ID"], row["geometry"], row["Population"])
-            populations.append(population)
-        return populations
+        try:
+            df = pd.read_csv(file_path)
+            return df
+        except FileNotFoundError:
+            print(f"The file {file_path} was not found.")
+            return None

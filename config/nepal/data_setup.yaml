@@ -1,0 +1,48 @@
+preprocessing:
+  hazards:
+    - type: "earthquakes"
+      source: "data/nepal/inputs/earthquake/"
+      map_unit: "cm/s^2"
+      return_periods: [475, 975, 1500, 2475]
+      substantial_damage: 0.01
+      complete_destruction: None
+      destination: "data/nepal/outputs/map/earthquake/"
+      historical: False
+    - type: "landslides"
+      source: "data/nepal/inputs/landslides/"
+      map_unit: ""
+      return_periods: None
+      substantial_damage: None
+      complete_destruction: None
+      destination: "data/nepal/outputs/map/landslides/"
+      historical: True
+  infrastructures:
+    - type: "PHC"
+      source: "/path/to/schools.csv"
+      destination: "/path/to/output/schools_result.csv"
+
+    - type: "Healt Facilities"
+      source: "/path/to/markets.csv"
+      destination: "/path/to/output/markets_result.csv"
+
+  population:
+    - type: "population_4326"
+      source: "data/nepal/inputs/popu/nepal_npl_ct_popu_pop_sp_py_GHS_2023_p_u_Clipped_E2020_Nepal_4326.tif"
+      destination: "data/nepal/outputs/map/population_4326.gpkg"
+    - type: "population_54009"
+      source: "data/nepal/inputs/popu/nepal_npl_ct_popu_pop_sp_py_GHS_2023_p_u_Clipped_E2020_Nepal_54009.tif"
+      destination: "data/nepal/outputs/map/population_54009.gpkg"
+
+adminitrative_maps: "data/nepal/inputs/adm/nepal_npl_ct_admn_ad3_sp_py_NEPAL_GEOBOUNDARIES_14022024_p_a_geoboundaries.gpkg"
+preprocessed_hazards: "data/nepal/outputs/hazards/"
+
+processing:
+  output_file: "data/nepal/outputs/maps/"
+  tasks:
+    - name: "Population Exposure Calculation"
+      type: "exposure_population"
+      population_sources: "data/nepal/outputs/population/"
+
+    - name: "Infrastructure Exposure Calculation"
+      type: "exposure_infrastructure"
+      infrastructures_sources: "data/nepal/outputs/infrastructure/"
