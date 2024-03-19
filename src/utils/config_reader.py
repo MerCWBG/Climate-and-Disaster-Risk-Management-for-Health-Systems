@@ -20,7 +20,8 @@ class Logger:
             self.directory = os.getcwd()
 
         # Get the timestamp of the process
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        # timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = None
 
         # Combine directory, file name, and timestamp to get the complete path
         log_file_path = os.path.join(
