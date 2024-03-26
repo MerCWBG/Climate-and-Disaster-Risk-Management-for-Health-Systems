@@ -28,6 +28,10 @@ class Logger:
             self.directory, f"{self.file_name}_{timestamp}.log"
         )
 
+        # Remove the existing log file if it exists
+        if os.path.exists(log_file_path):
+            os.remove(log_file_path)
+
         # Create the directory if it doesn't exist
         if not os.path.exists(self.directory):
             os.makedirs(self.directory)

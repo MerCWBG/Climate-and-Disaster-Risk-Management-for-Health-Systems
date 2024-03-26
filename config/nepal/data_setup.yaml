@@ -1,30 +1,38 @@
 adminitrative_maps: "data/nepal/inputs/adm/nepal_npl_ct_admn_ad3_sp_py_NEPAL_GEOBOUNDARIES_14022024_p_a_geoboundaries.gpkg"
-
 output_files: "data/nepal/outputs/"
+cache_files: "data/nepal/cache/"
 
 population:
   #   - name: "population_4326"
   #     source: "data/nepal/inputs/popu/nepal_npl_ct_popu_pop_sp_py_GHS_2023_p_u_Clipped_E2020_Nepal_4326.tif"
-  #     destination: "data/nepal/outputs/population/"
   - name: "population_54009"
     source: "data/nepal/inputs/popu/nepal_npl_ct_popu_pop_sp_py_GHS_2023_p_u_Clipped_E2020_Nepal_54009.tif"
-    destination: "data/nepal/outputs/population/"
 
 infrastructures:
-  - name: "PHC"
-    filter: ["HF_T_RO=='Primary Health Care Center'"]
+  - name: "health_care"
+    type_name: "type"
     source: "data/nepal/inputs/heal/nepal_npl_ct_heal_heal_sp_tab_NDRRNA_14022024.gpkg"
+    funtion: nepal_health_care_type
 
-  - name: "healt_facilities"
-    filter: ["HF_T_RO!='Primary Health Care Center'"]
+  # - name: "PHC"
+  #   filter: ["HF_T_RO=='Primary Health Care Center'"]
+  #   parameters: [""]
+  #   source: "data/nepal/inputs/heal/nepal_npl_ct_heal_heal_sp_tab_NDRRNA_14022024.gpkg"
+
+  # - name: "healt_facilities"
+  #   filter: ["HF_T_RO!='Primary Health Care Center'"]
+  #   source: "data/nepal/inputs/heal/nepal_npl_ct_heal_heal_sp_tab_NDRRNA_14022024.gpkg"
+
+  - name: "school"
+    funtion: ["HF_T_RO!='Primary Health Care Center'"]
     source: "data/nepal/inputs/heal/nepal_npl_ct_heal_heal_sp_tab_NDRRNA_14022024.gpkg"
 
 hazards:
   - name: "earthquakes"
     source: "data/nepal/inputs/hazards/Global_earthquake_hazard_WB/" # source: "data/nepal/inputs/hazards/earthquakes/" # Directory for input earthquakes
     map_unit: "cm/s^2" # The unit in the pga maps
-    return_periods: [475, 975, 1500, 2475] # Filenames need to have a format
-    substantial_damage: 0.01 # Substantial Damage threshold (m)
+    # return_periods: [475, 975, 1500, 2475] # Filenames need to have a format
+    # substantial_damage: 0.01 # Substantial Damage threshold (m)
     complete_destruction: None # Complete destruction threshold
     destination: "data/nepal/outputs/hazards/" # id, geometry, value, damage (gpkg files)
     historical: False
@@ -33,18 +41,23 @@ hazards:
     source: "data/nepal/inputs/hazards/landslides/" # path to input earthquakes (.tif)
     map_unit: "" # The unit in the pga maps
     return_periods: None #
-    substantial_damage: None # Substantial Damage threshold (m)
-    complete_destruction: None # Complete destruction threshold
+    # substantial_damage: None # Substantial Damage threshold (m)
+    # complete_destruction: None # Complete destruction threshold
     destination: "data/nepal/outputs/hazards/"
     historical: True # True when hazard information do not have return periods
 
-processing:
-  output_file: "data/nepal/outputs/maps/"
-  tasks:
-    - name: "Population Exposure Calculation"
-      type: "exposure_population"
-      population_sources: "data/nepal/outputs/population/"
+damage_per_hazard: "path.xml" #check excel with pairs config..
 
-    - name: "Infrastructure Exposure Calculation"
-      type: "exposure_infrastructure"
-      infrastructures_sources: "data/nepal/outputs/infrastructure/"
+output_task: "data/nepal/outputs/maps/"
+tasks:
+  - name: "Population Exposure Calculation"
+    type: "exposure_population"
+    population_sources: "data/nepal/outputs/population/"
+
+  - name: "Infrastructure Exposure Calculation"
+    type: "exposure_infrastructure"
+    infrastructures_sources: "data/nepal/outputs/infrastructure/"
+
+  - name: "Risk Index"
+    type: "risk_index"
+    extra_sources: "data/nepal/outputs/extra/"

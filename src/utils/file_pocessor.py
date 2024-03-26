@@ -76,8 +76,7 @@ class FileLister:
                     files_list.append((FileLister.drop_extension(file), file_path))
             return files_list
         except Exception as e:
-            print(f"Error listing files in directory: {e}")
-            return None
+            raise Exception(f"Error listing files in directory: {e}")
 
     @staticmethod
     def generate_combinations(list_of_lists):
